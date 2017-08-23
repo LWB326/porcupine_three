@@ -27,7 +27,7 @@ class AdminController {
             'users' => $users));
     }
 
-    /**
+ 	 /**
      * Add article controller.
      *
      * @param Request $request Incoming request
@@ -39,12 +39,15 @@ class AdminController {
         $articleForm->handleRequest($request);
         if ($articleForm->isSubmitted() && $articleForm->isValid()) {
             $app['dao.article']->save($article);
-            $app['session']->getFlashBag()->add('success', 'Ce chapitre a été ajouté avec succès.');
+            $app['session']->getFlashBag()->add('success', 'Chapitre enregistré avec succès.');
         }
         return $app['twig']->render('article_form.html.twig', array(
             'title' => 'Nouveau chapitre',
             'articleForm' => $articleForm->createView()));
     }
+
+
+	
 
     /**
      * Edit article controller.
@@ -61,7 +64,7 @@ class AdminController {
             $app['dao.article']->save($article);
             $app['session']->getFlashBag()->add('success', 'Ce chapitre a été actualisé avec succès.');
         }
-        return $app['twig']->render('article_form.html.twig', array(
+          return $app['twig']->render('article_form.html.twig', array(
             'title' => 'Edition du chapitre',
             'articleForm' => $articleForm->createView()));
     }
@@ -186,19 +189,26 @@ class AdminController {
     }
 	
 	 /**
-     * Reset report counter controller.
+     * Reset comment report counter controller.
 	 *
 	 * @param integer $id Comment id
 	 * @param Application $app Silex application
 	 */
-	public function signalResetCommentAction($id, Application $app) {
+	public function resetReportCommentAction($id, Application $app) {
        	$comment = $app['dao.comment']->find($id);
-		$newSigCp = 0;
-		$commentData = array('sig_cp' => $newSigCp); 
-		$app['dao.comment']->signalReset($id,$commentData);
+		$comment->setSignal( '0');
+		$app['dao.comment']->save($comment); 
         $app['session']->getFlashBag()->add('success', 'Compteur de signalement remis à zéro.');
 		// Redirect to admin home page
 		return $app->redirect($app['url_generator']->generate('admin'));
+		
+		
+		
+		//return $app->redirect('/admin/{comments}');
+		
+	
+		//$this->get('router')->generate('user_settings', ['_fragment' => 'password']);
+		
     }
 	
 }

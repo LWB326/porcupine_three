@@ -60,10 +60,11 @@
 		<!-- section 2 picture  header  class="col-xs-12 col-lg-12"style=width:100%-->				
 		<div id="photoBandeau1" class="col-xs-12 col-lg-12" > 
 			<p>
-				<img id="picture1" class=img-responsive src="http://MicroCMS/images/salmon_glacier_820x230.jpg"  alt="vue panoramique du glacier du saumon, Alaska" />	
+			<!--	<img id="picture1" class=img-responsive <src="http://MicroCMS/images/salmon_glacier_820x230.jpg"  alt="vue panoramique du glacier du saumon, Alaska" />
+			-->
+			<img id="picture1" class=img-responsive src="{{ asset('/images/salmon_glacier_820x230.jpg') }}"  alt="vue panoramique du glacier du saumon, Alaska" />	
 			</p>
 		</div>		
-
 		
 	<body>	
 		<!-- section 3 left sidebar and content -->
@@ -92,7 +93,7 @@
 		<!-- section 4 footer -->			
 		<div id="piedPage">
 			<footer class="footer">
-				<a href={{ path('home_mention') }}>Mentions légales - Contact - Infos </a>
+				<a href="{{ path('home_mention') }}">Mentions légales - Contact - Infos </a>
 				- Vous êtes sur le site officiel du roman : <strong>Un aller simple pour l'Alaska </strong> 2017 
 			</footer>
 		</div>

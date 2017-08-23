@@ -15,7 +15,8 @@ class CommentDAO extends DAO
      * @var \MicroCMS\DAO\UserDAO
      */
     private $userDAO;
-
+	
+	
     public function setArticleDAO(ArticleDAO $articleDAO) {
         $this->articleDAO = $articleDAO;
     }
@@ -63,7 +64,8 @@ class CommentDAO extends DAO
         $commentData = array(
             'art_id' => $comment->getArticle()->getId(),
             'usr_id' => $comment->getAuthor()->getId(),
-            'com_content' => $comment->getContent()
+            'com_content' => $comment->getContent(),
+			'sig_cp' => $comment->getSignal(),
             );
 
         if ($comment->getId()) {
@@ -102,7 +104,7 @@ class CommentDAO extends DAO
             $user = $this->userDAO->find($userId);
             $comment->setAuthor($user);
         }
-        
+      
         return $comment;
     }
     /**
@@ -131,6 +133,7 @@ class CommentDAO extends DAO
     public function deleteAllByArticle($articleId) {
         $this->getDb()->delete('t_comment', array('art_id' => $articleId));
     }
+	
 	/**
      * Returns a comment matching the supplied id.
      *
@@ -146,15 +149,13 @@ class CommentDAO extends DAO
         else
             throw new \Exception("No comment matching id " . $id);
     }
-
-    // ...
+   
     /**
      * Removes a comment from the database.
      *
      * @param @param integer $id The comment id
      */
     public function delete($id) {
-
         // Delete the comment
         $this->getDb()->delete('t_comment', array('com_id' => $id));
     }
@@ -168,54 +169,6 @@ class CommentDAO extends DAO
         $this->getDb()->delete('t_comment', array('usr_id' => $userId));
     }
 	
-	/**
-     * Increases the signal counter (sig_cp) of a comment
-     *
-     * @param integer $id The id of the comment
-	 *
-	 * @param array $commentData The new incremented value of sig_cp related to the comment
-     */
-	public function signalPlus($id, $commentData){
-		$this->getDb()->update('t_comment', $commentData, array('com_id' => $id));
-	}
-		
 	
-	/**
-     * Resets to a zero value the signal counter (sig_cp) of a comment
-     *
-     * @param integer $id The id of the comment
-     */
-	public function signalReset($id, $commentData){
-		$this->getDb()->update('t_comment', $commentData, array('com_id' => $id));
-	}
 	
-	 /**
-     * Return a list of all comments for an article, sorted by signal counter value sig_cp (desc).
-     *
-     * @param integer $articleId The article id.
-     *
-     * @return array A list of all comments for the article.
-     */
-    public function findAllByArticle2($articleId) {
-        // The associated article is retrieved only once
-        $article = $this->articleDAO->find($articleId);	
-
-        // art_id is not selected by the SQL query
-        // The article won't be retrieved during domain objet construction
-        $sql = "select com_id, com_content, usr_id, sig_cp from t_comment where art_id=? order by sig_cp";
-        $result = $this->getDb()->fetchAll($sql, array($articleId));
-
-        // Convert query result to an array of domain objects
-        $comments = array();
-        foreach ($result as $row) {
-            $comId = $row['com_id'];
-            $comment = $this->buildDomainObject($row);
-            // The associated article is defined for the constructed comment
-            $comment->setArticle($article);
-            $comments[$comId] = $comment;
-        }
-		
-        return $comments2;
-    }	
-
 }

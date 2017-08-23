@@ -37,15 +37,8 @@ class Comment
      *
      * @var integer
      */
-    private $signal;
+	private $signal;
 	
-	/** ajout MYF
-     * Comment father.
-     *
-     * @var integer
-     */
-    private $father;
-
 	
     public function getId() {
         return $this->id;
@@ -83,23 +76,15 @@ class Comment
         return $this;
     }
 	
-	 public function getSignal() {
-        return $this->signal;
-    }
-
-    public function setSignal($signal) {
-        $this->signal = $signal;
-        return $this;
-    }	
 	
-	/*  getter setter de father */
-	 public function getFather() {
-        return $this->father;
-    }
-
-    public function setFather($father) {
-        $this->father = $father;
-        return $this;
-    }
+	public function getSignal() {
+		return $this->signal;
+	}
 	
-} /* overall */
+	public function setSignal($signal) {
+		$this->signal = $signal;
+		return $this;
+	}
+	
+	
+} 

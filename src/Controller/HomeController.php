@@ -6,6 +6,9 @@ use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use MicroCMS\Domain\Comment;
 use MicroCMS\Form\Type\CommentType;
+use MicroCMS\DAO\CommentDAO; // MYF
+use MicroCMS\DAO\ArticleDAO; // MYF
+use Silex\Provider\UrlGeneratorServiceProvider;
 
 class HomeController {
 
@@ -20,13 +23,18 @@ class HomeController {
     }
     
 	/**
-     * Mention legales page controller ajout MYF.
+     * Mandatory information page controller.
      *
      * @param Application $app Silex application
      */
     public function mentionAction(Application $app) {
-        return $app['twig']->render('mention.html.twig');
-    }
+		return $app['twig']->render('mention.html.twig');
+		//return $app->redirect($app['url_generator']->generate('admin#comments'));
+    	//return $app->redirect($app->('admin'));
+		
+		// return $app['twig']->render('admin.html.twig');	
+		
+	}
 	
     /**
      * Article details controller.
@@ -80,22 +88,26 @@ class HomeController {
     }
 	
 	/**
-    * Comment report counter (increase) controller.
+    * Comment report counter (+1 increase) controller.
 	*
 	* @param integer $id Comment id
 	* @param Application $app Silex application
 	*/
-	public function signalPlusCommentAction($id, Application $app) {
-       	$comment = $app['dao.comment']->find($id);
-		$newComReport = $comment->getSignal() + 1;
-		$commentData = array('sig_cp' => $newComReport); 
-		$app['dao.comment']->signalPlus($id,$commentData);
+	public function reportCommentAction($id, Application $app) {
+		$comment = $app['dao.comment']->find($id);
+		$comment->setSignal($comment->getSignal() + 1);
+        $app['dao.comment']->save($comment); 
+        
 		$app['session']->getFlashBag()->add('success', 'Ce commentaire a été signalé avec succès.');
-        // Redirect to admin home page
-        return $app->redirect($app['url_generator']->generate('admin'));
-	}	
-
-	/**
+		
+		// redirecting to the same page
+		//** get article id
+		$article = $comment->getArticle()->getId();
+		//** redirecting 
+	    return $app->redirect("/web/article/$article");
+  	}
+	
+		/**
     * Comment form erase controller.
 	*
 	* @param integer $id Article id
@@ -104,4 +116,15 @@ class HomeController {
 	 public function eraseAction($id, Application $app) { 
     }
 
+	
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

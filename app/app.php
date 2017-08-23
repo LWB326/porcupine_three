@@ -1,6 +1,8 @@
 <?php
 use Symfony\Component\Debug\ErrorHandler;
 use Symfony\Component\Debug\ExceptionHandler;
+use Symfony\Component\HttpFoundation\Request; // comment for dev see line 59
+
 // Register global error and exception handlers
 ErrorHandler::register();
 ExceptionHandler::register();
@@ -53,3 +55,32 @@ $app['dao.comment'] = function ($app) {
     $commentDAO->setUserDAO($app['dao.user']);
     return $commentDAO;
 };
+
+// Register error handler comment for dev
+$app->error(function (\Exception $e, Request $request, $code) use ($app) {
+    switch ($code) {
+        case 401:
+            $message = 'Utilisateur non authentifié.';
+            break;
+        case 403:
+            $message = 'Accés refusé.';
+            break;
+        case 404:
+            $message = 'Page non trouvée.';
+            break;
+        case 500:
+            $message = 'Erreur sur le serveur.';
+            break;    
+        case 503:
+            $message = 'Erreur sur le serveur.';
+            break;        
+        default:
+            $message = "Une anomalie s'est produite.";
+    }
+    return $app['twig']->render('error.html.twig', array('message' => $message));
+});
+
+
+
+
+

@@ -35,9 +35,11 @@
                 {% for article in articles %}
                 <tr>
                     <td><a class="articleTitle" href="{{ path('article', { 'id': article.id }) }}">{{ article.title }}</a></td>
-                    <td>{{ article.content | truncate(100,true,'...') | raw }}</td>
+                    <td>{{ article.content | striptags | truncate(100,true,'...') | raw }}</td>
                     <td>
                         <a href="{{ path('admin_article_edit', { 'id': article.id }) }}" class="btn btn-info btn-xs" title="Editer"><span class="glyphicon glyphicon-edit"></span></a>
+					</td>
+                    <td>       
                         <button type="button" class="btn btn-danger btn-xs" title="Supprimer le chapitre" data-toggle="modal" data-target="#articleDialog{{ article.id }}"><span class="glyphicon glyphicon-remove"></span>
                         </button>
                         <div class="modal fade" id="articleDialog{{ article.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -53,14 +55,11 @@
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
                                         <a href="{{ path('admin_article_delete', { 'id': article.id }) }}" class="btn btn-danger">Confirmer</a>
-                                    <a href="#comments" data-toggle="tab">
-                                    
-                                    
                                     </div>
                                 </div><!-- /.modal-content -->
                             </div><!-- /.modal-dialog -->
                         </div><!-- /.modal -->
-                    </td>
+					</td>
                 </tr>
                 {% endfor %}
             </table>
@@ -68,7 +67,7 @@
         {% else %}
         <div class="alert alert-warning">Aucun chapitre trouvé</div>
         {% endif %}
-        <a href="{{ path('admin_article_add') }}"><button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Ajouter un chapitre </button></a>
+        <a href="{{ path('admin_article_add') }}"><button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Ajouter un chapitre</button></a>
     </div>
 <!-- section commentaires -->
     <div class="tab-pane fade adminTable" id="comments">
@@ -80,18 +79,21 @@
                         <th>Titre du chapitre</th>
                         <th>Auteur du commentaire</th>
                         <th>Texte du commentaire</th>
-						<th>Nombre</br>signalements</th>
+						<th>Nombre<br/>signalements</th>
                     </tr>
                 </thead>
                 {% for comment in comments %}
                 <tr>
                     <td><a class="articleTitle" href="{{ path('article', { 'id': comment.article.id }) }}">{{ comment.article.title | truncate(15) }}</a></td>
                     <td>{{ comment.author.username }}</td>
-                    <td>{{ comment.content | truncate(60) }}</td>
+                    <td>{{ comment.content | striptags | truncate(60) }}</td>
                     <td>{{ comment.signal }}</td>
                     <td>
+                        <!-- edits a comment  -->
                         <a href="{{ path('admin_comment_edit', { 'id': comment.id }) }}" class="btn btn-info btn-xs" title="Editer le commentaire"><span class="glyphicon glyphicon-edit"></span></a>
-                        
+					</td>
+                    <td>    
+                         <!-- resets a report counter to zero -->
                         <button type="button" class="btn btn-success btn-xs" title="Remise à zéro compteur" data-toggle="modal" data-target="#commentDialog{{ comment.id }}"><span class="glyphicon glyphicon-remove"></span>
 						</button>
 						<div class="modal fade" id="commentDialog{{ comment.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -106,12 +108,14 @@
 									</div>
 									<div class="modal-footer">
 										<button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
-										<a href="{{ path('admin_comment_signalReset', { 'id': comment.id }) }}" class="btn btn-danger">Confirmer</a>
+										<a href="{{ path('comment_reportReset', { 'id': comment.id }) }}" class="btn btn-danger">Confirmer</a>
 									</div>
 								</div><!-- /.modal-content -->
 							</div><!-- /.modal-dialog -->
 						</div><!-- /.modal -->   
-                                                                            
+					</td>  
+                    <td>    
+                          <!-- deletes a comment -->                                           
                         <button type="button" class="btn btn-danger btn-xs" title="Supprimer le commentaire" data-toggle="modal" data-target="#commentDialogA{{ comment.id }}"><span class="glyphicon glyphicon-remove"></span>
                         </button>
                         <div class="modal fade" id="commentDialogA{{ comment.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -119,19 +123,24 @@
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        
                                         <h4 class="modal-title" id="myModalLabel">Confirmation nécessaire</h4>
                                     </div>
+                                    
                                     <div class="modal-body">
                                         Souhaitez-vous réellement supprimer ce commentaire ?
                                     </div>
+                                    
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                                        
+                                        
                                         <a href="{{ path('admin_comment_delete', { 'id': comment.id }) }}" class="btn btn-danger">Confirmer</a>
                                     </div>
                                 </div><!-- /.modal-content -->
                             </div><!-- /.modal-dialog -->
-                        </div><!-- /.modal -->
-                    </td>
+                        </div><!-- /.modal -->                   
+					</td>                  
                 </tr>
                 {% endfor %}
             </table>

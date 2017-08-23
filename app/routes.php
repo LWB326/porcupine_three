@@ -68,19 +68,19 @@ $app->post('/api/article', "MicroCMS\Controller\ApiController::addArticleAction"
 $app->delete('/api/article/{id}', "MicroCMS\Controller\ApiController::deleteArticleAction")
 ->bind('api_article_delete');
 
-// Increase of a comment report counter
-$app->get('/home/comment/{id}/signalPlus', "MicroCMS\Controller\HomeController::signalPlusCommentAction")
-->bind('home_comment_signalPlus');
+// Increase a comment report counter
+$app->get('/home/comment/{id}/reportPlus', "MicroCMS\Controller\HomeController::reportCommentAction")
+->bind('comment_reportPlus');
 
-// Reset of a comment signal counter down to zero
-$app->get('/admin/comment/{id}/signalReset', "MicroCMS\Controller\AdminController::signalResetCommentAction")
-->bind('admin_comment_signalReset');
+// Reset a comment report counter down to zero
+$app->get('/admin/comment/{id}/resetReport', "MicroCMS\Controller\AdminController::resetReportCommentAction")
+->bind('comment_reportReset');
 
 // Mandatory information page
 $app->get('/home/mention', "MicroCMS\Controller\HomeController::mentionAction")
 ->bind('home_mention');
 
-
-// Erase comment form
+// Delete comment form content before validation
 $app->match('/article/{id}', "MicroCMS\Controller\HomeController::eraseAction")
 ->bind('erase_comment');
+

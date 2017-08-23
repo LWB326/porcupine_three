@@ -6,7 +6,7 @@
 	{% for article in articles %}
 		<article>
 			<h2><a class="articleTitle" href="{{ path('article', { 'id': article.id }) }}">{{ article.title }}</a></h2>
-			<p>{{ article.content | truncate (500, true,'...') | raw}}</p>
+			<p>{{ article.content | striptags | truncate (500, true,'...') | raw}}</p>
 		</article>
 	{% endfor %}
 {% endblock %}

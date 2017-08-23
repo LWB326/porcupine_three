@@ -1,13 +1,13 @@
 {% extends 'layout.html.twig' %}
 
-{% block title %}Identifiez-vous{% endblock %}
+{% block title %}Merci de vous identifier{% endblock %}
 
 
 {% block content %}
 <h2 class="text-center" >{{ block('title') }}</h2>
 {% if error %}
 <div class="alert alert-danger">
-    <strong>Login failed!</strong> {{ error }}
+    <strong>Echec d'identification!</strong> {{ error }}
 </div>
 {% endif %}
 <div class="well">

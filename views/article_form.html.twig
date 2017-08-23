@@ -28,7 +28,7 @@
         {{ form_label(articleForm.content, null, { 'label_attr':  {
             'class': 'col-sm-4 control-label'
         }}) }}
-        <div class="col-sm-6">
+        <div class="col-sm-offset-2 col-sm-9">
             {{ form_errors(articleForm.content) }}
             {{ form_widget(articleForm.content, { 'attr':  {
                 'class': 'form-control',
@@ -39,6 +39,7 @@
     <div class="form-group">
         <div class="col-sm-offset-4 col-sm-3">
             <input type="submit" class="btn btn-primary" value="Enregistrer le chapitre" />
+            <a class="btn btn-warning" href="{{ path('admin_article_add')}}">Effacer</a>
         </div>
     </div>
 {{ form_end(articleForm) }}

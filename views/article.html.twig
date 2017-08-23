@@ -7,53 +7,56 @@
 
 {% block content %}
 <p>
-		<h2>{{ article.title }}</h2>
-		<div id="textechapitre">
+	<h2>{{ article.title }}</h2>
+	<div id="textechapitre">
 		{{ article.content | raw}}
-		</br></br>
-		</div>		
+		<br/><br/>
+	</div>		
 
-	<!-- add a comment on an article - start -->
-		<h4>Commenter le chapitre " {{ article.title }} " </h4>
-		{% if commentForm %}
-			{{ form_start(commentForm) }}
-				<form>
-				<div class="form-group">		
-					
-					{{ form_errors(commentForm.content) }}           
-					{{ form_widget(commentForm.content, { 'attr':  {
-						'rows': '4',
-						'class': 'form-control',
-						'placeholder': 'Saisissez un commentaire sur ce chapitre'
-						}}) 
-					}}		
-					
-					<input type="submit" class="btn btn-primary" value="Valider" />
-	
-					<!-- erase button  -->					
-					<a class="btn btn-success" href="{{ path('erase_comment', { 'id': article.id })}}">Effacer</a> 
-				</form>				
-			{{ form_end(commentForm) }}
+<!-- add a comment on an article - start -->
+	<h4>Commenter le chapitre " {{ article.title }} " </h4>
+	{% if commentForm %}
+		{{ form_start(commentForm) }}
+			<form>
+			<div class="form-group">		
+
+				{{ form_errors(commentForm.content) }}           
+				{{ form_widget(commentForm.content, { 'attr': {
+					'rows': '4',
+					'class': 'form-control',
+					'placeholder': 'Saisissez un commentaire sur ce chapitre'
+					}}) 
+				}}		
+
+				<input type="submit" class="btn btn-primary" value="Valider" />
+
+				<!-- erase button  -->					
+				<a class="btn btn-success" href="{{ path('erase_comment', { 'id': article.id })}}">Effacer</a>
+			</div>	 
+			</form>				
+		{{ form_end(commentForm) }}
+		
 		{% for flashMessage in app.session.flashbag.get('success') %}
 			<div class="alert alert-success">
 				{{ flashMessage }}
 			</div>
 		{% endfor %}
-		{% else %}
-			<a href="{{ path('login') }} ">Connectez-vous</a> pour ajouter des commentaires.
-		{% endif %}
+	{% else %}
+		<a href="{{ path('login') }} ">Connectez-vous</a> pour ajouter des commentaires.
+	{% endif %}
 	<!-- add a comment on an article - end -->
-
+</p>
+<p>	
 	<!-- list and reporting of comments - start -->
 	<p><strong> Les commentaires </strong></p>
 	
 		<!-- list of all comments of a chapter - start -->
 	{% for comment in comments %}
-		<strong>{{comment.author.username}}</strong>  a écrit le commentaire suivant :</br>
+		<strong>{{comment.author.username}}</strong>  a écrit le commentaire suivant :<br/>
 		{{comment.content}}
 		<!-- list of all comments of a chapter - end -->
 
-		<!--  reporting of a comment - start --> 
+		<!--  report a comment - start --> 
 		<div id="signalement"> 
 			<button type="button" class="btn btn-warning btn-xs" title="Signaler ce commentaire comme inapproprié ou choquant" data-toggle="modal" data-target="#commentDialog{{ comment.id }}"><span class="glyphicon glyphicon-flag"></span>
 			</button>													
@@ -68,15 +71,18 @@
 							<div class="modal-body">
 								Souhaitez-vous vraiment signaler ce commentaire comme étant inapproprié ou choquant ?
 							</div>
-							<div class="modal-footer">
+							 <div class="modal-footer">
 								<button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
-
-								<a href="{{ path('home_comment_signalPlus', { 'id': comment.id }) }}" class="btn btn-danger">Confirmer</a>
+							
+								<a href="{{ path('comment_reportPlus', { 'id': comment.id }) }}" class="btn btn-danger" action="article.html.twig" >Confirmer</a>
+								
+	
 							</div>
+							
 						</div><!-- /.modal-content -->
 					</div><!-- /.modal-dialog -->
 				</div><!-- /.modal -->
-			</br></br>
+			<br/><br/>
 		</div>
 		<!-- list of comments reporting of a comment - end -->
 		
