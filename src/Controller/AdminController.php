@@ -40,6 +40,7 @@ class AdminController {
         if ($articleForm->isSubmitted() && $articleForm->isValid()) {
             $app['dao.article']->save($article);
             $app['session']->getFlashBag()->add('success', 'Chapitre enregistré avec succès.');
+			return $app->redirect($app['url_generator']->generate('home'));// MYF
         }
         return $app['twig']->render('article_form.html.twig', array(
             'title' => 'Nouveau chapitre',
@@ -63,6 +64,7 @@ class AdminController {
         if ($articleForm->isSubmitted() && $articleForm->isValid()) {
             $app['dao.article']->save($article);
             $app['session']->getFlashBag()->add('success', 'Ce chapitre a été actualisé avec succès.');
+			return $app->redirect($app['url_generator']->generate('admin'));// MYF
         }
           return $app['twig']->render('article_form.html.twig', array(
             'title' => 'Edition du chapitre',
@@ -99,11 +101,14 @@ class AdminController {
         if ($commentForm->isSubmitted() && $commentForm->isValid()) {
             $app['dao.comment']->save($comment);
             $app['session']->getFlashBag()->add('success', 'Ce commentaire a été actualisé avec succès.');
+			return $app->redirect($app['url_generator']->generate('admin'));// MYF
+			
         }
         return $app['twig']->render('comment_form.html.twig', array(
             'title' => 'Edition du commentaire',
             'commentForm' => $commentForm->createView()));
-    }
+  
+	}
 
     /**
      * Delete comment controller.
@@ -196,7 +201,7 @@ class AdminController {
 	 */
 	public function resetReportCommentAction($id, Application $app) {
        	$comment = $app['dao.comment']->find($id);
-		$comment->setSignal( '0');
+		$comment->setSignal( 0 );
 		$app['dao.comment']->save($comment); 
         $app['session']->getFlashBag()->add('success', 'Compteur de signalement remis à zéro.');
 		// Redirect to admin home page

@@ -4,8 +4,6 @@ namespace MicroCMS\DAO;
 
 use MicroCMS\Domain\Article;
 
-use Symfony\Component\Config\Definition\Exception\Exception; // MYF
-
 class ArticleDAO extends DAO
 {
     /**
@@ -33,24 +31,16 @@ class ArticleDAO extends DAO
      *
      * @return \MicroCMS\Domain\Article|throws an exception if no matching article is found
      */
-  	public function find($id) {
+    public function find($id) {
         $sql = "select * from t_article where art_id=?";
         $row = $this->getDb()->fetchAssoc($sql, array($id));
-        if (empty($row)) {	
-            throw new Exception("Chapitre non trouvé" . $id);
-		}
-        return $this->buildDomainObject($row);
-	
-	try	{
-		find($id);
-	}
 
-	catch(Exception $e)  {
-		echo 'Message :'. $e->getMessage(); 
-	}	
+        if ($row)
+            return $this->buildDomainObject($row);
+        else
+            throw new \Exception("No article matching id " . $id);
     }
- 
-    
+	
     /**
      * Creates an Article object based on a DB row.
      *

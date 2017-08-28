@@ -73,7 +73,8 @@ $app->error(function (\Exception $e, Request $request, $code) use ($app) {
             break;    
         case 503:
             $message = 'Erreur sur le serveur.';
-            break;        
+            break; 
+       
         default:
             $message = "Une anomalie s'est produite.";
     }

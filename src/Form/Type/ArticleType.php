@@ -12,16 +12,13 @@
 	<script type="text/javascript"></script>
 <?php
 	
-
-
-
 	class ArticleType extends AbstractType
 	{
 		public function buildForm(FormBuilderInterface $builder, array $options)
 		{
 			$builder
 				->add('title', TextType::class)
-				->add('content', TextareaType::class);
+				->add('content', TextareaType::class , array('required'=>false));
 		}
 
 		public function getName()
@@ -29,6 +26,3 @@
 			return 'article';
 		}
 	}
-
- 
-
